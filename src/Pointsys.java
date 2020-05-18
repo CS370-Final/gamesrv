@@ -22,7 +22,7 @@ public class Pointsys {
 			}
 		if (quest_rank  == 3 && data.getRank3() != 300)
 			{
-			y = data.getRank1() + 15;
+			y = data.getRank3() + 15;
 			data.setRank3(y);
 			}			
 	}
