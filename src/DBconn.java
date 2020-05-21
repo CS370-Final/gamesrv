@@ -4,26 +4,38 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 public class DBconn {
-
-	public String query(String que) {
-		Connection db = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet rs;
-        String result="";
-        
+	private static boolean exists=false;
+	private final String conn="jdbc:mysql://axess.inc.gs:3310/game?"+"user=cs370&password=FIN@LPr0ject";
+	private Connection db;
+	
+	private DBconn() throws SQLException, ClassNotFoundException {
+		Class.forName("com.mysql.jdbc.Driver");
+		this.db=DriverManager.getConnection(this.conn);
+	}
+	public void close() {
+		if(this.db!=null) {
+			try {
+				this.db.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public static DBconn makeConn() throws SQLException, ClassNotFoundException {
+		if(!DBconn.exists) {
+			DBconn.exists=true;
+			return new DBconn();
+		}
+		else {return null;}
+	}
+	public ResultSet query(String que) {
+        PreparedStatement preparedStatement=null;
+        ResultSet rs=null;
         try {
         	Class.forName("com.mysql.jdbc.Driver");
-        	db =DriverManager.getConnection("jdbc:mysql://axess.inc.gs:3310/game?"+"user=cs370&password=FIN@LPr0ject");
-        	preparedStatement = db.prepareStatement(que);
+        	preparedStatement=this.db.prepareStatement(que);
         	rs=preparedStatement.executeQuery();
-        	if (rs.next()){
-	            result = rs.getString(1);
-	            rs.close();
-	            preparedStatement.close();
-        	}
-        	else {
-        		result = "No Results";
-        	}
         } catch (Exception e) {
     		try {
 				throw e;
@@ -31,25 +43,7 @@ public class DBconn {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	  	} finally {
-		      if (preparedStatement != null) {
-			        try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			  }	      
-
-		      if (db != null) {
-		        try {
-					db.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		      }
-	    }
-        return result;
+	  	}
+        return rs;
 	}
 }
