@@ -22,10 +22,16 @@ public class DBconn {
 			}
 		}
 	}
-	public static DBconn makeConn() throws SQLException, ClassNotFoundException {
+	public static DBconn makeConn() {
 		if(!DBconn.exists) {
 			DBconn.exists=true;
-			return new DBconn();
+			try {
+				return new DBconn();
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
 		}
 		else {return null;}
 	}
