@@ -30,7 +30,7 @@ public class getQuestions extends HttpServlet {
 	 */
     protected String comPose(HttpServletRequest rq) {
 		String[] ranks=rq.getParameterValues("ranks");
-		String que="SELECT text,a,b,c,d FROM questions";
+		String que="SELECT id,text,a,b,c,d FROM questions";
 		if(ranks!=null) {
 			if(ranks.length<3) {
 				que+=" WHERE rank=";
