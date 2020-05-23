@@ -16,6 +16,7 @@ public class DBconn {
 		if(this.db!=null) {
 			try {
 				this.db.close();
+				DBconn.exists=false;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -51,5 +52,14 @@ public class DBconn {
 			}
 	  	}
         return rs;
+	}
+	public boolean isClosed() {
+		try {
+			return this.db.isClosed();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
