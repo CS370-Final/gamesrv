@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 
 import org.httprpc.io.JSONEncoder;
 import org.httprpc.sql.ResultSetAdapter;
@@ -17,5 +18,8 @@ public class Servlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public static ResultSet que(String q) {
+		return Servlet.db.query(q);
 	}
 }
