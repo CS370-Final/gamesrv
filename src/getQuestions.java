@@ -42,7 +42,6 @@ public class getQuestions extends HttpServlet {
 				}
 			}
 		}
-		System.out.print(que);
 		return que;
 	}
     
