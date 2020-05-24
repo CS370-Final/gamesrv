@@ -34,6 +34,7 @@ public class answer extends HttpServlet {
     	ResultSet u=Servlet.que("SELECT score FROM users WHERE user_id=" + user);
     	if(u!=null) {
     		try {
+    			u.next();
 				score=Integer.parseInt(u.getString(1));
 				score+=15;
 				Servlet.que("UPDATE users SET score=" + Integer.toString(score) + " WHERE user_id=" + user);
@@ -41,13 +42,15 @@ public class answer extends HttpServlet {
 					ResultSet s=Servlet.que("SELECT 1_credits FROM users WHERE user_id=" + user);
 					if(s!=null) {
 						try {
-							int creds=Integer.parseInt(s.getString(1));
-							if(creds<300) {
-								creds+=15;
-								if(creds>300) {
-									creds=300;
+							if(s.next()) {
+								int creds=Integer.parseInt(s.getString(1));
+								if(creds<300) {
+									creds+=15;
+									if(creds>300) {
+										creds=300;
+									}
+									Servlet.que("UPDATE users SET 1_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 								}
-								Servlet.que("UPDATE users SET 1_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 							}
 						} catch (NumberFormatException | SQLException e) {
 							// TODO Auto-generated catch block
@@ -59,13 +62,15 @@ public class answer extends HttpServlet {
 					ResultSet s=Servlet.que("SELECT 2_credits FROM users WHERE user_id=" + user);
 					if(s!=null) {
 						try {
-							int creds=Integer.parseInt(s.getString(1));
-							if(creds<300) {
-								creds+=15;
-								if(creds>300) {
-									creds=300;
+							if(s.next()) {
+								int creds=Integer.parseInt(s.getString(1));
+								if(creds<300) {
+									creds+=15;
+									if(creds>300) {
+										creds=300;
+									}
+									Servlet.que("UPDATE users SET 2_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 								}
-								Servlet.que("UPDATE users SET 2_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 							}
 						} catch (NumberFormatException | SQLException e) {
 							// TODO Auto-generated catch block
@@ -77,13 +82,15 @@ public class answer extends HttpServlet {
 					ResultSet s=Servlet.que("SELECT 3_credits FROM users WHERE user_id=" + user);
 					if(s!=null) {
 						try {
-							int creds=Integer.parseInt(s.getString(1));
-							if(creds<300) {
-								creds+=15;
-								if(creds>300) {
-									creds=300;
+							if(s.next()) {
+								int creds=Integer.parseInt(s.getString(1));
+								if(creds<300) {
+									creds+=15;
+									if(creds>300) {
+										creds=300;
+									}
+									Servlet.que("UPDATE users SET 3_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 								}
-								Servlet.que("UPDATE users SET 3_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 							}
 						} catch (NumberFormatException | SQLException e) {
 							// TODO Auto-generated catch block
@@ -106,30 +113,48 @@ public class answer extends HttpServlet {
     	ResultSet u=Servlet.que("SELECT score FROM users WHERE user_id=" + user);
     	if(u!=null) {
     		try {
-				score=Integer.parseInt(u.getString(1));
-				score-=10;
-				if(score<0) {
-					score=0;
-				}
-				Servlet.que("UPDATE users SET score=" + Integer.toString(score) + " WHERE user_id=" + user);
-				ResultSet s=Servlet.que("SELECT 3_credits FROM users WHERE user_id=" + user);
-				if(s!=null) {
-					int creds;
-					try {
-						creds=Integer.parseInt(s.getString(1));
-						if(creds<=0) {
-							s=Servlet.que("SELECT 2_credits FROM users WHERE user_id=" + user);
-							try {
+    			if(u.next()) {
+					score=Integer.parseInt(u.getString(1));
+					score-=10;
+					if(score<0) {
+						score=0;
+					}
+					Servlet.que("UPDATE users SET score=" + Integer.toString(score) + " WHERE user_id=" + user);
+					ResultSet s=Servlet.que("SELECT 3_credits FROM users WHERE user_id=" + user);
+					if(s!=null) {
+						int creds;
+						try {
+							if(s.next()) {
 								creds=Integer.parseInt(s.getString(1));
 								if(creds<=0) {
-									s=Servlet.que("SELECT 1_credits FROM users WHERE user_id=" + user);
+									s=Servlet.que("SELECT 2_credits FROM users WHERE user_id=" + user);
 									try {
-										creds=Integer.parseInt(s.getString(1));
-										creds-=10;
-										if(creds<0) {
-											creds=0;
+										if(s.next()) {
+											creds=Integer.parseInt(s.getString(1));
+											if(creds<=0) {
+												s=Servlet.que("SELECT 1_credits FROM users WHERE user_id=" + user);
+												try {
+													if(s.next()) {
+														creds=Integer.parseInt(s.getString(1));
+														creds-=10;
+														if(creds<0) {
+															creds=0;
+														}
+														Servlet.que("UPDATE users SET 1_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
+													}
+												} catch (NumberFormatException | SQLException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+											}
+											else {
+												creds-=10;
+												if(creds<0) {
+													creds=0;
+												}
+												Servlet.que("UPDATE users SET 2_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
+											}
 										}
-										Servlet.que("UPDATE users SET 1_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 									} catch (NumberFormatException | SQLException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -140,25 +165,15 @@ public class answer extends HttpServlet {
 									if(creds<0) {
 										creds=0;
 									}
-									Servlet.que("UPDATE users SET 2_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
+									Servlet.que("UPDATE users SET 1_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
 								}
-							} catch (NumberFormatException | SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							}
+						} catch (NumberFormatException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						else {
-							creds-=10;
-							if(creds<0) {
-								creds=0;
-							}
-							Servlet.que("UPDATE users SET 1_credits=" + Integer.toString(creds) + " WHERE user_id=" + user);
-						}
-					} catch (NumberFormatException | SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
-				}
+    			}
     		} catch (NumberFormatException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -183,15 +198,17 @@ public class answer extends HttpServlet {
 		ResultSet r=Servlet.que("SELECT rank FROM questions WHERE id=" + question);
 		if(a!=null && r!=null) {
 			try {
+				a.next();
+				r.next();
 				correct=a.getString(1);
 				rank=r.getString(1);
 				if(choice.contentEquals(correct)) {
 					addRight(user,rank);
-					response.getWriter().append("Correct");
+					response.getWriter().write("Correct");
 				}
 				else {
 					addWrong(user,rank);
-					response.getWriter().append("Incorrect");
+					response.getWriter().write("Incorrect");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
